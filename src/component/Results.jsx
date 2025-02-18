@@ -3,7 +3,9 @@ import React from "react";
 const Results = ({ history, score, restartQuiz }) => {
   return (
     <div className="text-white text-center">
-      <h2 className="text-3xl font-bold mb-4">Quiz Completed!</h2>
+      <h2 className="text-3xl font-bold my-4 text-green-600">
+        Quiz Completed!
+      </h2>
       <p className="text-lg">
         Your Score: {score} / {history.length}
       </p>

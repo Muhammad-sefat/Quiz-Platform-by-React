@@ -1,45 +1,60 @@
-// src/component/indexedDB.js
+const DB_NAME = "QuizDB";
+const DB_VERSION = 2;
+const STORE_NAME = "history";
 
-export const openDB = () => {
+// Open the database and create object store if it doesn't exist
+const openDB = () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("QuizDB", 1);
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onupgradeneeded = (event) => {
-      let db = event.target.result;
-      if (!db.objectStoreNames.contains("History")) {
-        db.createObjectStore("History", { keyPath: "id", autoIncrement: true });
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "id" });
       }
     };
 
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject("Failed to open IndexedDB");
+    request.onsuccess = (event) => resolve(event.target.result);
+    request.onerror = (event) => reject(event.target.error);
   });
 };
 
 // Save quiz history
 export const saveHistory = async (history) => {
   const db = await openDB();
-  const tx = db.transaction("History", "readwrite");
-  const store = tx.objectStore("History");
-  store.add({ timestamp: new Date(), history });
+  const transaction = db.transaction(STORE_NAME, "readwrite");
+  const store = transaction.objectStore(STORE_NAME);
+  store.put({ id: 1, history });
+
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = (event) => reject(event.target.error);
+  });
 };
 
 // Get quiz history
 export const getHistory = async () => {
-  const db = await openDB();
+  const db = await openDB(); // Ensure DB is opened properly
   return new Promise((resolve, reject) => {
-    const tx = db.transaction("History", "readonly");
-    const store = tx.objectStore("History");
-    const request = store.getAll();
+    const transaction = db.transaction(STORE_NAME, "readonly");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(1);
 
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject("Failed to load history");
+    request.onsuccess = () =>
+      resolve(request.result ? request.result.history : []);
+    request.onerror = (event) => reject(event.target.error);
   });
 };
 
 // Clear quiz history
 export const clearHistory = async () => {
   const db = await openDB();
-  const tx = db.transaction("History", "readwrite");
-  tx.objectStore("History").clear();
+  const transaction = db.transaction(STORE_NAME, "readwrite");
+  const store = transaction.objectStore(STORE_NAME);
+  store.delete(1);
+
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = (event) => reject(event.target.error);
+  });
 };

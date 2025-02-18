@@ -12,7 +12,6 @@ const Question = ({
   timeLeft,
   handleNextQuestion,
 }) => {
-  console.log(question, currentIndex);
   return (
     <div className="text-white text-center">
       {/* Timer */}
