@@ -1,7 +1,9 @@
+import Quiz from "./component/Quiz";
+
 function App() {
   return (
     <>
-      <p>This is Quiz Paltform</p>
+      <Quiz />
     </>
   );
 }
