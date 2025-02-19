@@ -74,7 +74,7 @@ const Question = ({
       <button
         className="mt-4 bg-green-500 px-6 py-2 rounded w-full hover:bg-green-600"
         onClick={() => handleNextQuestion(true)}
-        disabled={!feedback}
+        disabled={!selectedAnswer && !userInput && !feedback}
       >
         {currentIndex + 1 === 10 ? "Finish Quiz" : "Next Question"}
       </button>

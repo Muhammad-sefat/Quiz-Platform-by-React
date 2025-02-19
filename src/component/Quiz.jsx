@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Results from "./Results";
 import Question from "./Question";
-import { saveHistory, getHistory, clearHistory } from "./IndexedDB";
+import { clearHistory, getHistory, saveHistory } from "./Stroage";
 
 const Quiz = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,15 +17,11 @@ const Quiz = () => {
   const [quizStarted, setQuizStarted] = useState(false);
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      const storedHistory = await getHistory();
-      if (storedHistory.length > 0) {
-        setHistory(storedHistory);
-        setQuizFinished(true);
-      }
-    };
-
-    fetchHistory();
+    const storedHistory = getHistory();
+    if (storedHistory.length > 0) {
+      setHistory(storedHistory);
+      setQuizFinished(true);
+    }
 
     fetch("/data.json")
       .then((res) => res.json())
@@ -54,17 +50,24 @@ const Quiz = () => {
     const isCorrect =
       answer === correctAnswer || parseInt(answer) === correctAnswer;
 
-    setFeedback(isCorrect ? "✅ Correct!" : "❌ Incorrect!");
+    setFeedback(
+      isCorrect
+        ? "✅ Correct!"
+        : "❌ Incorrect! Please Choose the Correct Answer"
+    );
 
     setScore(isCorrect ? score + 1 : score);
-    setHistory((prev) => [
-      ...prev,
+
+    const newHistory = [
+      ...history,
       {
         question: quizQuestions[currentIndex].question,
         answer,
         correct: isCorrect,
       },
-    ]);
+    ];
+
+    setHistory(newHistory);
     setSelectedAnswer(answer);
   };
 
@@ -77,6 +80,7 @@ const Quiz = () => {
     if (currentIndex + 1 < quizQuestions.length) {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
+      setUserInput(" ");
       setFeedback(null);
       setTimeLeft(30);
     } else {
@@ -85,8 +89,8 @@ const Quiz = () => {
     }
   };
 
-  const restartQuiz = async () => {
-    await clearHistory();
+  const restartQuiz = () => {
+    clearHistory();
     setCurrentIndex(0);
     setScore(0);
     setHistory([]);
