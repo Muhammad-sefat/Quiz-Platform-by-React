@@ -1,8 +1,24 @@
-# React + Vite
+# 🧠 Ultimate Quiz App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fun and interactive quiz application built with **React**! Users can test their knowledge across various topics, answer multiple-choice and numerical questions, and track their performance.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+✅ **Dynamic Quiz System** – Loads questions from a JSON file  
+✅ **Multiple Choice & Numeric Answers** – Supports different question types  
+✅ **Live Timer** – 30 seconds per question  
+✅ **Instant Feedback** – Shows correct or incorrect answers  
+✅ **Score Tracking** – Keeps track of the user's performance  
+✅ **Quiz History** – Saves completed quiz results in **localStorage**  
+✅ **Responsive Design** – Works on all screen sizes  
+✅ **Restart Quiz** – Users can clear history and try again  
+
+## 🛠️ Installation & Usage
+
+1. **Clone the repository**  
+   ```sh
+   git clone https://github.com/Muhammad-sefat/Quiz-Platform-by-React
+
+
+#### Live Link : https://quiz-platform-by-react.vercel.app/
+
